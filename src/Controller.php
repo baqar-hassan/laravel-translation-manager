@@ -179,7 +179,8 @@ class Controller extends BaseController
             $group = $request->get('file');
             $base_strings = Translation::where('group', $group)->where('locale', $base_locale)->get();
             foreach ($base_strings as $base_string) {
-                $base_query = Translation::where('group', $group)->where('locale', $newLocale)->where('key', $base_string->key);
+                $base_query = Translation::where('group', $group)->whereNotNull('value')
+                    ->where('locale', $newLocale)->where('key', $base_string->key);
                 if ($base_query->exists() && $base_query->whereNotNull('value')->exists()) {
                     // Translation already exists. Skip
                     continue;
